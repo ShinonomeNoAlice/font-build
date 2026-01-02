@@ -1,0 +1,50 @@
+name: Build Iosevka Etoile
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - private-build-plans.toml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout build repo
+        uses: actions/checkout@v4
+
+      - name: Checkout Iosevka
+        uses: actions/checkout@v4
+        with:
+          repository: be5invis/Iosevka
+          path: iosevka
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: iosevka
+        run: npm ci
+
+      - name: Copy build plan
+        run: |
+          cp private-build-plans.toml iosevka/
+
+      - name: Build custom font
+        working-directory: iosevka
+        run: |
+          npm run build -- contents::IosevkaEtoile
+
+      - name: Collect artifacts
+        run: |
+          mkdir dist
+          cp -r iosevka/dist/IosevkaEtoile dist/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: IosevkaEtoile
+          path: dist/
