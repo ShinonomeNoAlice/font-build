@@ -41,7 +41,7 @@ jobs:
       - name: Build custom font
         working-directory: iosevka
         run: |
-          npm run build -- webfont::IosevkaEtoile
+          npm run build -- woff2::IosevkaEtoile
 
       - name: Collect artifacts
         run: |
