@@ -25,6 +25,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install ttfautohint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ttfautohint
+
       - name: Install dependencies
         working-directory: iosevka
         run: npm ci
